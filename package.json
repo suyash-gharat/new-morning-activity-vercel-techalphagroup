@@ -1,0 +1,10 @@
+{
+  "name": "morning-activity-scheduler",
+  "version": "1.0.0",
+  "description": "Daily WhatsApp reminder system for office morning activity sessions via ReplyCX",
+  "private": true,
+  "dependencies": {},
+  "engines": {
+    "node": "18.x"
+  }
+}
