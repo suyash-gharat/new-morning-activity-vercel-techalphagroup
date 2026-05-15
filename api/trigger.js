@@ -1,5 +1,8 @@
 import { kvGet, kvSet, initDB } from './db.js';
 
+const WEBHOOK_URL = 'https://outbound.reply.cx/api/v1/outbound/6M7bW3f8CngH072703062137xJI2dDEN/campaign/7TmqtiFu945G091707094178RXBtDQn1';
+const REPLYCX_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjo1MX0.O4gAw2o9ABNdUfredMhsbV5I-zPiuV0-1buqWOdgs9s';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -7,9 +10,6 @@ export default async function handler(req, res) {
     await initDB();
     const schedule = await kvGet('schedule');
     if (!schedule) return res.status(400).json({ error: 'No schedule found. Upload a CSV first.' });
-
-    const webhookUrl = process.env.WEBHOOK_URL;
-    if (!webhookUrl) return res.status(400).json({ error: 'Webhook URL not configured.' });
 
     const tz = 'Asia/Kolkata';
     const today = new Intl.DateTimeFormat('en-CA', {
@@ -35,16 +35,17 @@ export default async function handler(req, res) {
       const payload = { phone: entry.phone, name: entry.name, activity: entry.activity, date: entry.date, message };
 
       try {
-        const response = await fetch(webhookUrl, {
+        const response = await fetch(WEBHOOK_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.REPLYCX_API_KEY}`
+            'Authorization': `Bearer ${REPLYCX_API_KEY}`
           },
           body: JSON.stringify(payload)
         });
         const ok = response.ok;
-        results.push({ phone: entry.phone, name: entry.name, status: ok ? 'sent' : 'failed' });
+        const responseText = await response.text();
+        results.push({ phone: entry.phone, name: entry.name, status: ok ? 'sent' : 'failed', response: responseText });
         if (ok) sent++; else failed++;
         await new Promise(r => setTimeout(r, 200));
       } catch (err) {
