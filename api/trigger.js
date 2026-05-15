@@ -21,31 +21,31 @@ export default async function handler(req, res) {
       return res.status(200).json({ sent: 0, date: today, message: 'No activities today' });
     }
 
-    const template = 'Good morning {name}! 🌅 Your activity today is *{activity}*. See you at the Morning Session! 💪';
     const results = [];
     let sent = 0, failed = 0;
 
     for (const entry of todayEntries) {
-      const message = template
-        .replace(/{name}/g, entry.name)
-        .replace(/{activity}/g, entry.activity.charAt(0).toUpperCase() + entry.activity.slice(1))
-        .replace(/{date}/g, entry.date)
-        .replace(/{phone}/g, entry.phone);
-
-      const payload = { phone: entry.phone, name: entry.name, activity: entry.activity, date: entry.date, message };
+      // ReplyCX outbound API format
+      const payload = {
+        phone: entry.phone,
+        name: entry.name,
+        activity: entry.activity
+      };
 
       try {
         const response = await fetch(WEBHOOK_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${REPLYCX_API_KEY}`
+            'Authorization': `Bearer ${REPLYCX_API_KEY}`,
+            'Accept': 'application/json'
           },
           body: JSON.stringify(payload)
         });
-        const ok = response.ok;
         const responseText = await response.text();
-        results.push({ phone: entry.phone, name: entry.name, status: ok ? 'sent' : 'failed', response: responseText });
+        console.log(`ReplyCX response for ${entry.name}: ${response.status} - ${responseText}`);
+        const ok = response.ok;
+        results.push({ phone: entry.phone, name: entry.name, status: ok ? 'sent' : 'failed', httpStatus: response.status, response: responseText });
         if (ok) sent++; else failed++;
         await new Promise(r => setTimeout(r, 200));
       } catch (err) {
