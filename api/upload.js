@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { kvSet } from './db.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -19,14 +19,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'No valid rows found in schedule' });
     }
 
-    await kv.set('schedule', JSON.stringify(valid));
-    await kv.set('schedule_updated_at', new Date().toISOString());
+    await kvSet('schedule', valid);
+    await kvSet('schedule_updated_at', new Date().toISOString());
 
-    console.log(`[upload] Saved ${valid.length} schedule entries`);
     return res.status(200).json({ count: valid.length, message: 'Schedule saved successfully' });
-
   } catch (err) {
-    console.error('[upload] Error:', err);
     return res.status(500).json({ error: err.message || 'Internal server error' });
   }
 }
