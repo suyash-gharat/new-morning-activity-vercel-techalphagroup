@@ -1,20 +1,17 @@
-import { kvGet, kvSet } from './db.js';
+import { kvGet, kvSet, initDB } from './db.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const [schedule, config] = await Promise.all([
-      kvGet('schedule'),
-      kvGet('config')
-    ]);
-
+    await initDB();
+    const schedule = await kvGet('schedule');
     if (!schedule) return res.status(400).json({ error: 'No schedule found. Upload a CSV first.' });
 
-    const webhookUrl = config?.webhookUrl;
+    const webhookUrl = process.env.WEBHOOK_URL;
     if (!webhookUrl) return res.status(400).json({ error: 'Webhook URL not configured.' });
 
-    const tz = config.timezone || 'Asia/Kolkata';
+    const tz = 'Asia/Kolkata';
     const today = new Intl.DateTimeFormat('en-CA', {
       timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit'
     }).format(new Date());
@@ -24,9 +21,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ sent: 0, date: today, message: 'No activities today' });
     }
 
-    const template = config.template ||
-      'Good morning {name}! 🌅 Your activity today is *{activity}*. See you at the Morning Session! 💪';
-
+    const template = 'Good morning {name}! 🌅 Your activity today is *{activity}*. See you at the Morning Session! 💪';
     const results = [];
     let sent = 0, failed = 0;
 
