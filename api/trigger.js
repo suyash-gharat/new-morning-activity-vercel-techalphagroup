@@ -42,7 +42,10 @@ export default async function handler(req, res) {
       try {
         const response = await fetch(webhookUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.REPLYCX_API_KEY}`
+          },
           body: JSON.stringify(payload)
         });
         const ok = response.ok;
