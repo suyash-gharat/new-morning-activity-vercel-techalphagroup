@@ -1,10 +1,11 @@
 async function neonQuery(sql, params = []) {
-  const url = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
+  const connString = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
   
-  const match = url.match(/postgresql:\/\/([^:]+):([^@]+)@([^/]+)\/(.+)/);
-  if (!match) throw new Error('Invalid DATABASE_URL');
+  const url = new URL(connString);
+  const user = decodeURIComponent(url.username);
+  const password = decodeURIComponent(url.password);
+  const host = url.hostname;
   
-  const [, user, password, host, database] = match;
   const httpUrl = `https://${host}/sql`;
   
   const response = await fetch(httpUrl, {
@@ -12,7 +13,7 @@ async function neonQuery(sql, params = []) {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Basic ${Buffer.from(`${user}:${password}`).toString('base64')}`,
-      'Neon-Connection-String': url
+      'Neon-Connection-String': connString
     },
     body: JSON.stringify({ query: sql, params })
   });
