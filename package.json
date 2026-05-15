@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Daily WhatsApp reminder system for office morning activity sessions via ReplyCX",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.0"
+  },
   "engines": {
     "node": "18.x"
   }
