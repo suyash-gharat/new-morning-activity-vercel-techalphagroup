@@ -25,12 +25,14 @@ export default async function handler(req, res) {
     let sent = 0, failed = 0;
 
     for (const entry of todayEntries) {
-      // ReplyCX outbound API format
-      const payload = {
-        phone: entry.phone,
-        name: entry.name,
-        activity: entry.activity
-      };
+      // ReplyCX expects an array
+      const payload = [
+        {
+          phone: entry.phone,
+          name: entry.name,
+          activity: entry.activity
+        }
+      ];
 
       try {
         const response = await fetch(WEBHOOK_URL, {
