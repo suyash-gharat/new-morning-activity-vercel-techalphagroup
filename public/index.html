@@ -30,602 +30,213 @@
       --shadow-lg: 0 12px 48px rgba(82,113,255,0.15);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      min-height: 100vh;
-    }
+    body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-size: 15px; min-height: 100vh; }
+    body::before { content:''; position:fixed; top:-200px; right:-200px; width:600px; height:600px; background:radial-gradient(circle,rgba(82,113,255,0.08) 0%,transparent 70%); border-radius:50%; pointer-events:none; z-index:0; animation:floatOrb 8s ease-in-out infinite; }
+    body::after { content:''; position:fixed; bottom:-150px; left:-150px; width:500px; height:500px; background:radial-gradient(circle,rgba(82,113,255,0.06) 0%,transparent 70%); border-radius:50%; pointer-events:none; z-index:0; animation:floatOrb 10s ease-in-out infinite reverse; }
+    @keyframes floatOrb { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(30px) scale(1.05)} }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.7;transform:scale(.9)} }
+    @keyframes slideIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
 
-    /* Animated background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: -200px; right: -200px;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(82,113,255,0.08) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
-      animation: floatOrb 8s ease-in-out infinite;
-    }
-    body::after {
-      content: '';
-      position: fixed;
-      bottom: -150px; left: -150px;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(82,113,255,0.06) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
-      animation: floatOrb 10s ease-in-out infinite reverse;
-    }
-    @keyframes floatOrb {
-      0%, 100% { transform: translateY(0px) scale(1); }
-      50% { transform: translateY(30px) scale(1.05); }
-    }
-
-    /* Shell */
-    .shell { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+    .shell { display:flex; min-height:100vh; position:relative; z-index:1; }
 
     /* Sidebar */
-    .sidebar {
-      width: 260px; min-height: 100vh;
-      background: var(--white);
-      border-right: 1px solid var(--border);
-      display: flex; flex-direction: column;
-      position: fixed; top: 0; left: 0; bottom: 0;
-      z-index: 100;
-      box-shadow: 4px 0 24px rgba(82,113,255,0.06);
-    }
-
-    /* Logo area */
-    .sidebar-logo {
-      padding: 28px 24px 24px;
-      border-bottom: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-    }
-    .sidebar-logo::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--brand), var(--brand-light));
-    }
-    .logo-icon {
-      width: 44px; height: 44px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-light));
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 14px;
-      box-shadow: 0 6px 20px rgba(82,113,255,0.35);
-      position: relative;
-    }
-    .logo-icon::after {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 15px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
-      pointer-events: none;
-    }
-    .logo-icon svg { width: 22px; height: 22px; color: white; }
-    .logo-name {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 15px; font-weight: 800;
-      color: var(--text); line-height: 1.2;
-      letter-spacing: -0.3px;
-    }
-    .logo-sub {
-      font-size: 11px; color: var(--muted);
-      margin-top: 3px; font-weight: 400;
-      letter-spacing: 0.3px;
-    }
-    .logo-tag {
-      display: inline-flex; align-items: center;
-      background: var(--brand-soft);
-      color: var(--brand);
-      font-size: 10px; font-weight: 600;
-      padding: 3px 8px; border-radius: 20px;
-      margin-top: 8px; letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    /* Nav */
-    .nav { padding: 16px 12px; flex: 1; }
-    .nav-section-label {
-      font-size: 10px; font-weight: 700;
-      color: var(--muted); text-transform: uppercase;
-      letter-spacing: 1px; padding: 8px 12px 4px;
-    }
-    .nav-item {
-      display: flex; align-items: center; gap: 11px;
-      padding: 10px 14px; border-radius: 10px;
-      cursor: pointer; margin-bottom: 2px;
-      font-size: 14px; font-weight: 500;
-      color: var(--text2);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-    }
-    .nav-item:hover {
-      background: var(--brand-soft);
-      color: var(--brand);
-      transform: translateX(3px);
-    }
-    .nav-item.active {
-      background: linear-gradient(135deg, var(--brand-soft2), var(--brand-soft));
-      color: var(--brand);
-      font-weight: 600;
-    }
-    .nav-item.active::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 50%;
-      transform: translateY(-50%);
-      width: 3px; height: 60%;
-      background: var(--brand);
-      border-radius: 0 3px 3px 0;
-    }
-    .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
-    .nav-badge {
-      margin-left: auto;
-      background: var(--brand);
-      color: white; font-size: 10px;
-      padding: 2px 7px; border-radius: 20px;
-      font-weight: 700;
-    }
-
-    /* Status bar */
-    .sidebar-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
-    }
-    .status-pill {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--success-soft);
-      border: 1px solid rgba(0,200,150,0.2);
-      border-radius: 8px; padding: 8px 12px;
-    }
-    .status-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 8px var(--success);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.7; transform: scale(0.9); }
-    }
-    .status-text { font-size: 12px; font-weight: 600; color: var(--success); }
-    .status-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .sidebar { width:260px; min-height:100vh; background:var(--white); border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:100; box-shadow:4px 0 24px rgba(82,113,255,0.06); }
+    .sidebar-logo { padding:28px 24px 24px; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+    .sidebar-logo::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--brand),var(--brand-light)); }
+    .logo-icon { width:44px; height:44px; background:linear-gradient(135deg,var(--brand),var(--brand-light)); border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; box-shadow:0 6px 20px rgba(82,113,255,0.35); }
+    .logo-icon svg { width:22px; height:22px; color:white; }
+    .logo-name { font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:800; color:var(--text); line-height:1.2; letter-spacing:-.3px; }
+    .logo-sub { font-size:11px; color:var(--muted); margin-top:3px; }
+    .logo-tag { display:inline-flex; align-items:center; background:var(--brand-soft); color:var(--brand); font-size:10px; font-weight:600; padding:3px 8px; border-radius:20px; margin-top:8px; letter-spacing:.5px; text-transform:uppercase; }
+    .nav { padding:16px 12px; flex:1; }
+    .nav-section-label { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:8px 12px 4px; }
+    .nav-item { display:flex; align-items:center; gap:11px; padding:10px 14px; border-radius:10px; cursor:pointer; margin-bottom:2px; font-size:14px; font-weight:500; color:var(--text2); transition:all .2s cubic-bezier(.4,0,.2,1); position:relative; }
+    .nav-item:hover { background:var(--brand-soft); color:var(--brand); transform:translateX(3px); }
+    .nav-item.active { background:linear-gradient(135deg,var(--brand-soft2),var(--brand-soft)); color:var(--brand); font-weight:600; }
+    .nav-item.active::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:3px; height:60%; background:var(--brand); border-radius:0 3px 3px 0; }
+    .nav-item svg { width:17px; height:17px; flex-shrink:0; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid var(--border); }
+    .status-pill { display:flex; align-items:center; gap:8px; background:var(--success-soft); border:1px solid rgba(0,200,150,.2); border-radius:8px; padding:8px 12px; }
+    .status-dot { width:8px; height:8px; border-radius:50%; background:var(--success); box-shadow:0 0 8px var(--success); animation:pulse 2s infinite; }
+    .status-text { font-size:12px; font-weight:600; color:var(--success); }
+    .status-sub { font-size:10px; color:var(--muted); margin-top:1px; }
 
     /* Main */
-    .main { margin-left: 260px; flex: 1; padding: 36px 40px; }
+    .main { margin-left:260px; flex:1; padding:36px 40px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; }
+    .topbar-left h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:24px; font-weight:800; color:var(--text); letter-spacing:-.5px; }
+    .topbar-left p { color:var(--muted); font-size:14px; margin-top:3px; }
+    .topbar-right { display:flex; align-items:center; gap:10px; }
+    .date-chip { display:flex; align-items:center; gap:8px; background:var(--white); border:1px solid var(--border); border-radius:10px; padding:8px 14px; font-size:13px; font-weight:500; color:var(--text2); box-shadow:var(--shadow); }
+    .date-chip svg { width:14px; height:14px; color:var(--brand); }
 
-    /* Top bar */
-    .topbar {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      margin-bottom: 32px;
-    }
-    .topbar-left h2 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 24px; font-weight: 800;
-      color: var(--text); letter-spacing: -0.5px;
-    }
-    .topbar-left p { color: var(--muted); font-size: 14px; margin-top: 3px; }
-    .topbar-right {
-      display: flex; align-items: center; gap: 10px;
-    }
-    .date-chip {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px; padding: 8px 14px;
-      font-size: 13px; font-weight: 500;
-      color: var(--text2);
-      box-shadow: var(--shadow);
-    }
-    .date-chip svg { width: 14px; height: 14px; color: var(--brand); }
-
-    /* Stats grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px; margin-bottom: 28px;
-    }
-    .stat-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 16px; padding: 22px;
-      position: relative; overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-    .stat-card::after {
-      content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 80px; height: 80px;
-      border-radius: 0 16px 0 80px;
-      opacity: 0.06;
-    }
-    .stat-card.c1::after { background: var(--brand); }
-    .stat-card.c2::after { background: var(--success); }
-    .stat-card.c3::after { background: var(--warn); }
-    .stat-card.c4::after { background: var(--danger); }
-    .stat-icon {
-      width: 38px; height: 38px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 14px;
-    }
-    .stat-icon svg { width: 18px; height: 18px; }
-    .c1 .stat-icon { background: var(--brand-soft2); color: var(--brand); }
-    .c2 .stat-icon { background: var(--success-soft); color: var(--success); }
-    .c3 .stat-icon { background: rgba(255,155,66,0.1); color: var(--warn); }
-    .c4 .stat-icon { background: var(--danger-soft); color: var(--danger); }
-    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 6px; }
-    .stat-value {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 30px; font-weight: 800;
-      letter-spacing: -1px;
-    }
-    .c1 .stat-value { color: var(--brand); }
-    .c2 .stat-value { color: var(--success); }
-    .c3 .stat-value { color: var(--warn); }
-    .c4 .stat-value { color: var(--danger); }
-    .stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    /* Stats */
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+    .stat-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:22px; position:relative; overflow:hidden; box-shadow:var(--shadow); transition:transform .2s,box-shadow .2s; }
+    .stat-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+    .stat-card::after { content:''; position:absolute; top:0; right:0; width:80px; height:80px; border-radius:0 16px 0 80px; opacity:.06; }
+    .stat-card.c1::after{background:var(--brand)} .stat-card.c2::after{background:var(--success)} .stat-card.c3::after{background:var(--warn)} .stat-card.c4::after{background:var(--danger)}
+    .stat-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+    .stat-icon svg { width:18px; height:18px; }
+    .c1 .stat-icon{background:var(--brand-soft2);color:var(--brand)} .c2 .stat-icon{background:var(--success-soft);color:var(--success)} .c3 .stat-icon{background:rgba(255,155,66,.1);color:var(--warn)} .c4 .stat-icon{background:var(--danger-soft);color:var(--danger)}
+    .stat-label { font-size:12px; color:var(--muted); font-weight:500; margin-bottom:6px; }
+    .stat-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:30px; font-weight:800; letter-spacing:-1px; }
+    .c1 .stat-value{color:var(--brand)} .c2 .stat-value{color:var(--success)} .c3 .stat-value{color:var(--warn)} .c4 .stat-value{color:var(--danger)}
+    .stat-sub { font-size:11px; color:var(--muted); margin-top:4px; }
 
     /* Cards */
-    .card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 18px; padding: 28px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
-      transition: box-shadow 0.2s;
-    }
-    .card:hover { box-shadow: var(--shadow-lg); }
-    .card-header {
-      display: flex; align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 22px;
-    }
-    .card-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 17px; font-weight: 700;
-      color: var(--text); margin-bottom: 4px;
-    }
-    .card-sub { font-size: 13px; color: var(--muted); }
-    .card-badge {
-      background: var(--brand-soft);
-      color: var(--brand);
-      font-size: 11px; font-weight: 700;
-      padding: 4px 10px; border-radius: 20px;
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
+    .card { background:var(--white); border:1px solid var(--border); border-radius:18px; padding:28px; margin-bottom:20px; box-shadow:var(--shadow); }
+    .card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:22px; }
+    .card-title { font-family:'Plus Jakarta Sans',sans-serif; font-size:17px; font-weight:700; color:var(--text); margin-bottom:4px; }
+    .card-sub { font-size:13px; color:var(--muted); }
+    .card-badge { background:var(--brand-soft); color:var(--brand); font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:.5px; white-space:nowrap; }
 
-    /* Drop zone */
-    .dropzone {
-      border: 2px dashed var(--border2);
-      border-radius: 14px; padding: 48px 24px;
-      text-align: center; cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      background: var(--brand-soft);
-    }
-    .dropzone:hover, .dropzone.dragging {
-      border-color: var(--brand);
-      background: var(--brand-soft2);
-      transform: scale(1.005);
-    }
-    .dropzone input[type="file"] {
-      position: absolute; inset: 0; opacity: 0; cursor: pointer;
-    }
-    .drop-icon {
-      width: 56px; height: 56px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-light));
-      border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
-      box-shadow: 0 8px 24px rgba(82,113,255,0.3);
-    }
-    .drop-icon svg { width: 24px; height: 24px; color: white; }
-    .dropzone h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .dropzone p { color: var(--muted); font-size: 13px; }
-    .dropzone .hint {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12px; margin-top: 12px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 4px 12px; border-radius: 20px;
-    }
-
-    /* CSV format hint */
-    .format-hint {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px; padding: 14px 18px;
-      margin-top: 16px;
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    }
-    .format-hint .label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .fchip {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 6px; padding: 4px 10px;
-      font-size: 12px; font-weight: 600; color: var(--brand);
-    }
+    /* Dropzone */
+    .dropzone { border:2px dashed var(--border2); border-radius:14px; padding:48px 24px; text-align:center; cursor:pointer; transition:all .25s; position:relative; background:var(--brand-soft); }
+    .dropzone:hover,.dropzone.dragging { border-color:var(--brand); background:var(--brand-soft2); transform:scale(1.005); }
+    .dropzone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+    .drop-icon { width:56px; height:56px; background:linear-gradient(135deg,var(--brand),var(--brand-light)); border-radius:16px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; box-shadow:0 8px 24px rgba(82,113,255,.3); }
+    .drop-icon svg { width:24px; height:24px; color:white; }
+    .dropzone h3 { font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; }
+    .dropzone p { color:var(--muted); font-size:13px; }
+    .dropzone .hint { display:inline-flex; align-items:center; gap:5px; font-size:12px; margin-top:12px; background:var(--white); border:1px solid var(--border); color:var(--muted); padding:4px 12px; border-radius:20px; }
+    .format-hint { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-top:16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .format-hint .label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+    .fchip { display:inline-flex; align-items:center; gap:5px; background:var(--white); border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600; color:var(--brand); }
 
     /* Preview */
-    .preview-wrap { margin-top: 20px; display: none; }
-    .preview-wrap.show { display: block; }
-    .preview-header {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .preview-title { font-size: 14px; font-weight: 600; color: var(--text); }
-    .valid-count { font-size: 13px; font-weight: 700; color: var(--success); }
-    .error-count { font-size: 13px; font-weight: 700; color: var(--danger); }
-    .table-scroll { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead { background: linear-gradient(135deg, var(--brand-soft), var(--surface2)); }
-    th {
-      padding: 11px 16px; text-align: left;
-      font-weight: 700; color: var(--brand);
-      font-size: 11px; text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    td { padding: 11px 16px; border-top: 1px solid var(--border); }
-    tr:hover td { background: var(--brand-soft); }
-    .today-tag {
-      background: linear-gradient(135deg, var(--brand), var(--brand-light));
-      color: white; font-size: 10px; font-weight: 700;
-      padding: 2px 8px; border-radius: 20px; margin-left: 6px;
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
+    .preview-wrap { margin-top:20px; display:none; }
+    .preview-wrap.show { display:block; }
+    .preview-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .preview-title { font-size:14px; font-weight:600; color:var(--text); }
+    .valid-count { font-size:13px; font-weight:700; color:var(--success); }
+    .error-count { font-size:13px; font-weight:700; color:var(--danger); }
+
+    /* Tables */
+    .table-scroll { overflow-x:auto; border-radius:12px; border:1px solid var(--border); }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    thead { background:linear-gradient(135deg,var(--brand-soft),var(--surface2)); }
+    th { padding:11px 16px; text-align:left; font-weight:700; color:var(--brand); font-size:11px; text-transform:uppercase; letter-spacing:.06em; }
+    td { padding:11px 16px; border-top:1px solid var(--border); vertical-align:middle; }
+    tr:hover td { background:var(--brand-soft); }
+    .today-tag { background:linear-gradient(135deg,var(--brand),var(--brand-light)); color:white; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; margin-left:6px; text-transform:uppercase; letter-spacing:.5px; }
 
     /* Badges */
-    .badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 4px 11px; border-radius: 20px;
-      font-size: 12px; font-weight: 600;
-    }
-    .badge.dance { background: rgba(255,77,109,0.1); color: #ff4d6d; }
-    .badge.meditation { background: rgba(0,200,150,0.1); color: #00c896; }
-    .badge.exercise { background: rgba(82,113,255,0.1); color: var(--brand); }
-    .badge.sketching { background: rgba(255,155,66,0.1); color: #ff9b42; }
-    .badge.yoga { background: rgba(167,139,250,0.1); color: #a78bfa; }
-    .badge.zumba { background: rgba(236,72,153,0.1); color: #ec4899; }
-    .badge.quiz { background: rgba(14,165,233,0.1); color: #0ea5e9; }
-    .badge.other { background: rgba(100,116,139,0.1); color: #64748b; }
+    .badge { display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:12px; font-weight:600; }
+    .badge.dance{background:rgba(255,77,109,.1);color:#ff4d6d} .badge.meditation{background:rgba(0,200,150,.1);color:#00c896} .badge.exercise{background:rgba(82,113,255,.1);color:var(--brand)} .badge.sketching{background:rgba(255,155,66,.1);color:#ff9b42} .badge.yoga{background:rgba(167,139,250,.1);color:#a78bfa} .badge.zumba{background:rgba(236,72,153,.1);color:#ec4899} .badge.quiz{background:rgba(14,165,233,.1);color:#0ea5e9} .badge.other{background:rgba(100,116,139,.1);color:#64748b}
+    .status-valid{color:var(--success);font-weight:600;font-size:12px} .status-error{color:var(--danger);font-weight:600;font-size:12px}
 
-    /* Status in table */
-    .status-valid { color: var(--success); font-weight: 600; font-size: 12px; }
-    .status-error { color: var(--danger); font-weight: 600; font-size: 12px; }
+    /* Action buttons in table */
+    .action-btn { display:inline-flex; align-items:center; gap:4px; padding:5px 10px; border-radius:7px; font-size:12px; font-weight:600; cursor:pointer; border:none; font-family:'Outfit',sans-serif; transition:all .15s; }
+    .action-btn.edit { background:var(--brand-soft2); color:var(--brand); }
+    .action-btn.edit:hover { background:var(--brand); color:white; }
+    .action-btn.del { background:var(--danger-soft); color:var(--danger); }
+    .action-btn.del:hover { background:var(--danger); color:white; }
+    .action-btn svg { width:13px; height:13px; }
 
     /* Progress */
-    .progress-wrap { margin-top: 16px; display: none; }
-    .progress-track {
-      height: 4px; background: var(--surface2);
-      border-radius: 4px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, var(--brand), var(--brand-light));
-      border-radius: 4px;
-      transition: width 0.15s;
-    }
+    .progress-wrap { margin-top:16px; display:none; }
+    .progress-track { height:4px; background:var(--surface2); border-radius:4px; overflow:hidden; }
+    .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--brand),var(--brand-light)); border-radius:4px; transition:width .15s; }
 
     /* Buttons */
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 11px 22px; border-radius: 10px; cursor: pointer;
-      font-size: 14px; font-weight: 600;
-      font-family: 'Outfit', sans-serif;
-      border: none; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative; overflow: hidden;
-    }
-    .btn::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: rgba(255,255,255,0.15);
-      opacity: 0; transition: opacity 0.2s;
-    }
-    .btn:hover::before { opacity: 1; }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--brand), var(--brand-light));
-      color: white;
-      box-shadow: 0 4px 16px rgba(82,113,255,0.35);
-    }
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(82,113,255,0.4);
-    }
-    .btn-secondary {
-      background: var(--white);
-      color: var(--brand);
-      border: 1.5px solid var(--brand);
-    }
-    .btn-secondary:hover {
-      background: var(--brand-soft);
-      transform: translateY(-1px);
-    }
-    .btn-ghost {
-      background: var(--surface2);
-      color: var(--text2);
-      border: 1px solid var(--border);
-    }
-    .btn-ghost:hover { background: var(--brand-soft); color: var(--brand); }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
-    .btn svg { width: 16px; height: 16px; }
-    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn { display:inline-flex; align-items:center; gap:8px; padding:11px 22px; border-radius:10px; cursor:pointer; font-size:14px; font-weight:600; font-family:'Outfit',sans-serif; border:none; transition:all .2s cubic-bezier(.4,0,.2,1); }
+    .btn-primary { background:linear-gradient(135deg,var(--brand),var(--brand-light)); color:white; box-shadow:0 4px 16px rgba(82,113,255,.35); }
+    .btn-primary:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(82,113,255,.4); }
+    .btn-secondary { background:var(--white); color:var(--brand); border:1.5px solid var(--brand); }
+    .btn-secondary:hover { background:var(--brand-soft); transform:translateY(-1px); }
+    .btn-ghost { background:var(--surface2); color:var(--text2); border:1px solid var(--border); }
+    .btn-ghost:hover { background:var(--brand-soft); color:var(--brand); }
+    .btn-danger { background:var(--danger-soft); color:var(--danger); border:1.5px solid rgba(255,77,109,.3); }
+    .btn-danger:hover { background:var(--danger); color:white; transform:translateY(-1px); }
+    .btn:disabled { opacity:.45; cursor:not-allowed; transform:none !important; }
+    .btn svg { width:16px; height:16px; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; }
 
-    /* Message */
-    .msg-box {
-      padding: 12px 16px; border-radius: 10px;
-      font-size: 13px; font-weight: 500;
-      margin-top: 14px; display: none;
-    }
-    .msg-box.show { display: block; }
-    .msg-box.success {
-      background: var(--success-soft);
-      border: 1px solid rgba(0,200,150,0.25);
-      color: var(--success);
-    }
-    .msg-box.error {
-      background: var(--danger-soft);
-      border: 1px solid rgba(255,77,109,0.2);
-      color: var(--danger);
-    }
+    /* Msg */
+    .msg-box { padding:12px 16px; border-radius:10px; font-size:13px; font-weight:500; margin-top:14px; display:none; }
+    .msg-box.show { display:block; }
+    .msg-box.success { background:var(--success-soft); border:1px solid rgba(0,200,150,.25); color:var(--success); }
+    .msg-box.error { background:var(--danger-soft); border:1px solid rgba(255,77,109,.2); color:var(--danger); }
 
     /* Log */
-    .log-box {
-      background: var(--text);
-      border-radius: 12px; padding: 16px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 12.5px; line-height: 1.7;
-      max-height: 340px; overflow-y: auto;
-      min-height: 140px;
-    }
-    .log-box::-webkit-scrollbar { width: 4px; }
-    .log-box::-webkit-scrollbar-track { background: transparent; }
-    .log-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
-    .log-line { display: flex; gap: 12px; align-items: baseline; }
-    .log-line .ts { color: rgba(255,255,255,0.3); flex-shrink: 0; font-size: 11px; }
-    .log-line.ok .msg { color: #4ade80; }
-    .log-line.err .msg { color: #f87171; }
-    .log-line.info .msg { color: #93c5fd; }
-    .log-line .msg { color: rgba(255,255,255,0.85); }
+    .log-box { background:var(--text); border-radius:12px; padding:16px; font-family:'SF Mono','Fira Code',monospace; font-size:12.5px; line-height:1.7; max-height:340px; overflow-y:auto; min-height:140px; }
+    .log-box::-webkit-scrollbar{width:4px} .log-box::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:4px}
+    .log-line{display:flex;gap:12px;align-items:baseline} .log-line .ts{color:rgba(255,255,255,.3);flex-shrink:0;font-size:11px} .log-line.ok .msg{color:#4ade80} .log-line.err .msg{color:#f87171} .log-line.info .msg{color:#93c5fd} .log-line .msg{color:rgba(255,255,255,.85)}
 
     /* Schedule view */
-    .schedule-day {
-      border: 1px solid var(--border);
-      border-radius: 14px; overflow: hidden;
-      margin-bottom: 14px;
-      background: var(--white);
-      box-shadow: 0 2px 12px rgba(82,113,255,0.06);
-      transition: transform 0.2s;
-    }
-    .schedule-day:hover { transform: translateY(-1px); }
-    .schedule-day-header {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
-      background: linear-gradient(135deg, var(--brand-soft), var(--surface2));
-      border-bottom: 1px solid var(--border);
-    }
-    .schedule-day-header .date {
-      font-weight: 700; font-size: 14px; color: var(--text);
-    }
-    .schedule-day-header .count {
-      font-size: 12px; font-weight: 600;
-      background: var(--brand-soft2);
-      color: var(--brand);
-      padding: 3px 10px; border-radius: 20px;
-    }
-    .employee-chips { padding: 14px 18px; display: flex; gap: 10px; flex-wrap: wrap; }
-    .chip {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px; padding: 8px 14px;
-      font-size: 13px; font-weight: 500;
-      transition: all 0.2s;
-    }
-    .chip:hover {
-      border-color: var(--brand);
-      background: var(--brand-soft);
-      transform: translateY(-1px);
-    }
-    .avatar {
-      width: 28px; height: 28px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-light));
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800; color: white;
-      flex-shrink: 0;
-    }
+    .schedule-day { border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:14px; background:var(--white); box-shadow:0 2px 12px rgba(82,113,255,.06); }
+    .schedule-day-header { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; background:linear-gradient(135deg,var(--brand-soft),var(--surface2)); border-bottom:1px solid var(--border); }
+    .schedule-day-header .date { font-weight:700; font-size:14px; color:var(--text); }
+    .schedule-day-header .count { font-size:12px; font-weight:600; background:var(--brand-soft2); color:var(--brand); padding:3px 10px; border-radius:20px; }
+    .employee-chips { padding:14px 18px; display:flex; gap:10px; flex-wrap:wrap; }
+    .chip { display:flex; align-items:center; gap:8px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:8px 14px; font-size:13px; font-weight:500; transition:all .2s; }
+    .chip:hover { border-color:var(--brand); background:var(--brand-soft); }
+    .avatar { width:28px; height:28px; background:linear-gradient(135deg,var(--brand),var(--brand-light)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:white; flex-shrink:0; }
 
-    /* Empty state */
-    .empty {
-      text-align: center; padding: 48px 20px;
-      color: var(--muted);
-    }
-    .empty-icon {
-      width: 64px; height: 64px;
-      background: var(--surface2);
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
-    }
-    .empty-icon svg { width: 28px; height: 28px; color: var(--muted); }
-    .empty h3 { font-size: 16px; font-weight: 700; color: var(--text2); margin-bottom: 6px; }
-    .empty p { font-size: 13px; }
+    /* Empty */
+    .empty { text-align:center; padding:48px 20px; color:var(--muted); }
+    .empty-icon { width:64px; height:64px; background:var(--surface2); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+    .empty-icon svg { width:28px; height:28px; color:var(--muted); }
+    .empty h3 { font-size:16px; font-weight:700; color:var(--text2); margin-bottom:6px; }
 
     /* Tab panels */
-    .tab-panel { display: none; animation: fadeIn 0.25s ease; }
-    .tab-panel.active { display: block; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .tab-panel { display:none; animation:fadeIn .25s ease; }
+    .tab-panel.active { display:block; }
+    .divider { height:1px; background:var(--border); margin:24px 0; }
 
-    /* Divider */
-    .divider {
-      height: 1px; background: var(--border);
-      margin: 24px 0;
-    }
+    /* MODAL */
+    .modal-overlay { position:fixed; inset:0; background:rgba(15,21,53,.5); backdrop-filter:blur(4px); z-index:1000; display:none; align-items:center; justify-content:center; }
+    .modal-overlay.show { display:flex; }
+    .modal { background:var(--white); border-radius:20px; padding:32px; width:100%; max-width:480px; box-shadow:0 24px 64px rgba(82,113,255,.2); animation:slideIn .25s ease; }
+    .modal-title { font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; font-weight:800; color:var(--text); margin-bottom:4px; }
+    .modal-sub { font-size:13px; color:var(--muted); margin-bottom:24px; }
+    .field { margin-bottom:16px; }
+    .field label { display:block; font-size:12px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:.04em; }
+    .field input, .field select { width:100%; padding:11px 14px; background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; color:var(--text); font-size:14px; font-family:'Outfit',sans-serif; outline:none; transition:border .15s; }
+    .field input:focus, .field select:focus { border-color:var(--brand); background:var(--white); }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:24px; }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: var(--surface2); }
-    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 6px; }
+    /* Danger zone */
+    .danger-zone { background:var(--danger-soft); border:1.5px solid rgba(255,77,109,.2); border-radius:14px; padding:20px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .danger-zone-text h4 { font-size:15px; font-weight:700; color:var(--danger); margin-bottom:4px; }
+    .danger-zone-text p { font-size:13px; color:var(--text2); }
+
+    ::-webkit-scrollbar{width:6px;height:6px} ::-webkit-scrollbar-track{background:var(--surface2)} ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px}
   </style>
 </head>
 <body>
 <div class="shell">
-
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </div>
       <div class="logo-name">Morning Activity<br>Scheduler</div>
       <div class="logo-sub">Techalpha Group</div>
-      <div class="logo-tag">
-        <svg viewBox="0 0 24 24" fill="currentColor" style="width:9px;height:9px"><circle cx="12" cy="12" r="12"/></svg>
-        ReplyCX · WhatsApp
-      </div>
+      <div class="logo-tag">ReplyCX · WhatsApp</div>
     </div>
-
     <nav class="nav">
       <div class="nav-section-label">Menu</div>
       <div class="nav-item active" onclick="showTab('upload')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Upload Schedule
       </div>
+      <div class="nav-item" onclick="showTab('manage')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Manage Schedule
+      </div>
       <div class="nav-item" onclick="showTab('schedule')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Schedule View
       </div>
       <div class="nav-item" onclick="showTab('logs')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Send Logs
       </div>
     </nav>
-
     <div class="sidebar-footer">
       <div class="status-pill">
         <div class="status-dot"></div>
@@ -637,7 +248,6 @@
     </div>
   </aside>
 
-  <!-- Main Content -->
   <main class="main">
 
     <!-- UPLOAD TAB -->
@@ -650,12 +260,10 @@
         <div class="topbar-right">
           <div class="date-chip">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span id="todayDate">Loading...</span>
+            <span id="todayDate"></span>
           </div>
         </div>
       </div>
-
-      <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card c1">
           <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
@@ -676,72 +284,42 @@
           <div class="stat-sub">in schedule</div>
         </div>
         <div class="stat-card c4">
-          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg></div>
+          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16z"/></svg></div>
           <div class="stat-label">Messages Sent</div>
           <div class="stat-value" id="statSent">0</div>
           <div class="stat-sub">this session</div>
         </div>
       </div>
-
-      <!-- Upload Card -->
       <div class="card">
         <div class="card-header">
-          <div>
-            <div class="card-title">CSV File Upload</div>
-            <div class="card-sub">Upload a new schedule. Replaces any existing data for the uploaded month.</div>
-          </div>
+          <div><div class="card-title">CSV File Upload</div><div class="card-sub">Upload a new schedule. Replaces any existing data.</div></div>
           <span class="card-badge">Monthly</span>
         </div>
-
         <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
           <input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleFile(this.files[0])">
-          <div class="drop-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          </div>
+          <div class="drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
           <h3>Drop your CSV here</h3>
           <p>or click to browse your files</p>
-          <div class="hint">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
-            Supports .csv only
-          </div>
+          <div class="hint">Supports .csv only</div>
         </div>
-
         <div class="format-hint">
-          <span class="label">Required Format:</span>
-          <span class="fchip">📅 date</span>
-          <span class="fchip">📱 phone</span>
-          <span class="fchip">👤 name</span>
-          <span class="fchip">🏃 activity</span>
-          <span style="font-size:12px;color:var(--muted);margin-left:4px">Example: <code style="background:var(--white);padding:2px 6px;border-radius:4px;color:var(--brand)">2026-06-02,919876543210,Riya Sharma,dance</code></span>
+          <span class="label">Required:</span>
+          <span class="fchip">📅 date</span><span class="fchip">📱 phone</span><span class="fchip">👤 name</span><span class="fchip">🏃 activity</span>
+          <span style="font-size:12px;color:var(--muted)">Format: <code style="background:var(--white);padding:2px 6px;border-radius:4px;color:var(--brand)">YYYY-MM-DD,91XXXXXXXXXX,Name,activity</code></span>
         </div>
-
         <div class="preview-wrap" id="previewWrap">
           <div class="divider"></div>
           <div class="preview-header">
             <div class="preview-title" id="previewTitle">Preview</div>
-            <div>
-              <span class="valid-count" id="validCount"></span>
-              <span id="errCount"></span>
-            </div>
+            <div><span class="valid-count" id="validCount"></span><span id="errCount"></span></div>
           </div>
           <div class="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th><th>Phone</th><th>Name</th><th>Activity</th><th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="previewBody"></tbody>
-            </table>
+            <table><thead><tr><th>Date</th><th>Phone</th><th>Name</th><th>Activity</th><th>Status</th></tr></thead>
+            <tbody id="previewBody"></tbody></table>
           </div>
         </div>
-
-        <div class="progress-wrap" id="progressBar">
-          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-        </div>
-
-        <div id="uploadMsg"></div>
-
+        <div class="progress-wrap" id="progressBar"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+        <div id="uploadMsg" class="msg-box"></div>
         <div class="btn-row" style="margin-top:20px">
           <button class="btn btn-primary" id="btnUpload" onclick="uploadCSV()" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -757,37 +335,66 @@
           </button>
         </div>
       </div>
-
-      <!-- Activity Log card -->
       <div class="card">
         <div class="card-header">
-          <div>
-            <div class="card-title">Activity Log</div>
-            <div class="card-sub">Real-time log of webhook triggers and message delivery</div>
-          </div>
+          <div><div class="card-title">Activity Log</div><div class="card-sub">Real-time webhook trigger log</div></div>
           <button class="btn btn-ghost" onclick="clearLogs()" style="padding:6px 14px;font-size:12px">Clear</button>
         </div>
         <div class="log-box" id="logBox"></div>
       </div>
     </div>
 
-    <!-- SCHEDULE TAB -->
-    <div class="tab-panel" id="tab-schedule">
+    <!-- MANAGE TAB -->
+    <div class="tab-panel" id="tab-manage">
       <div class="topbar">
         <div class="topbar-left">
-          <h2>Schedule View</h2>
-          <p>All upcoming employee activity sessions</p>
+          <h2>Manage Schedule</h2>
+          <p>Edit or delete individual employee activities, or clear entire schedule</p>
         </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="card">
+        <div class="danger-zone">
+          <div class="danger-zone-text">
+            <h4>🗑 Delete Entire Schedule</h4>
+            <p>This will permanently remove all scheduled activities. This action cannot be undone.</p>
+          </div>
+          <button class="btn btn-danger" onclick="confirmClearAll()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+            Delete All
+          </button>
+        </div>
+      </div>
+
+      <!-- Schedule Table -->
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">All Schedule Entries</div><div class="card-sub" id="manageCount">Loading...</div></div>
+          <button class="btn btn-ghost" onclick="loadManage()" style="padding:8px 14px;font-size:12px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            Refresh
+          </button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>#</th><th>Date</th><th>Phone</th><th>Name</th><th>Activity</th><th>Actions</th></tr></thead>
+            <tbody id="manageBody">
+              <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">Loading schedule...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE VIEW TAB -->
+    <div class="tab-panel" id="tab-schedule">
+      <div class="topbar">
+        <div class="topbar-left"><h2>Schedule View</h2><p>All upcoming employee activity sessions</p></div>
       </div>
       <div class="card">
         <div id="scheduleContent">
-          <div class="empty">
-            <div class="empty-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <h3>No schedule uploaded yet</h3>
-            <p>Upload a CSV file to see the schedule here</p>
-          </div>
+          <div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><h3>No schedule uploaded yet</h3><p>Upload a CSV file to see the schedule here</p></div>
         </div>
       </div>
     </div>
@@ -795,10 +402,7 @@
     <!-- LOGS TAB -->
     <div class="tab-panel" id="tab-logs">
       <div class="topbar">
-        <div class="topbar-left">
-          <h2>Send Logs</h2>
-          <p>Real-time log of webhook triggers and message delivery</p>
-        </div>
+        <div class="topbar-left"><h2>Send Logs</h2><p>Real-time log of webhook triggers and delivery</p></div>
       </div>
       <div class="card">
         <div class="card-header">
@@ -812,242 +416,331 @@
   </main>
 </div>
 
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-title">Edit Activity</div>
+    <div class="modal-sub">Update the details for this employee's activity</div>
+    <input type="hidden" id="editIndex">
+    <div class="field">
+      <label>Date (YYYY-MM-DD)</label>
+      <input type="text" id="editDate" placeholder="2026-06-02">
+    </div>
+    <div class="field">
+      <label>Phone (with country code)</label>
+      <input type="text" id="editPhone" placeholder="919876543210">
+    </div>
+    <div class="field">
+      <label>Name</label>
+      <input type="text" id="editName" placeholder="Riya Sharma">
+    </div>
+    <div class="field">
+      <label>Activity</label>
+      <select id="editActivity">
+        <option value="dance">Dance</option>
+        <option value="meditation">Meditation</option>
+        <option value="exercise">Exercise</option>
+        <option value="sketching">Sketching</option>
+        <option value="yoga">Yoga</option>
+        <option value="zumba">Zumba</option>
+        <option value="quiz">Quiz</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <div class="modal-title">⚠️ Confirm Delete</div>
+    <div class="modal-sub" id="confirmText">Are you sure? This action cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" id="confirmBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        Yes, Delete
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
-  const TODAY = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Kolkata', year:'numeric', month:'2-digit', day:'2-digit'
-  }).format(new Date());
+const TODAY = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+let scheduleData = [];
 
-  // Set today date chip
-  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-IN', {
-    weekday: 'short', day: 'numeric', month: 'long', year: 'numeric'
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes(name))n.classList.add('active');});
+  if(name==='manage') loadManage();
+}
+
+// Drag drop
+const dz=document.getElementById('dropzone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragging');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('dragging'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragging');const f=e.dataTransfer.files[0];if(f)handleFile(f);});
+
+function handleFile(file){
+  if(!file||!file.name.endsWith('.csv')){showUploadMsg('error','Please upload a valid .csv file.');return;}
+  const reader=new FileReader();
+  reader.onload=e=>parseCSV(e.target.result,file.name);
+  reader.readAsText(file);
+}
+
+function parseCSV(text,filename){
+  const lines=text.trim().split('\n').filter(l=>l.trim());
+  if(lines.length<2){showUploadMsg('error','CSV appears empty.');return;}
+  const headers=lines[0].toLowerCase().replace(/\r/g,'').split(',').map(h=>h.trim());
+  const di=headers.indexOf('date'),pi=headers.indexOf('phone'),ni=headers.indexOf('name'),ai=headers.indexOf('activity');
+  if([di,pi,ni,ai].includes(-1)){showUploadMsg('error','Missing columns. Need: date, phone, name, activity');return;}
+  const rows=[];
+  lines.slice(1).forEach((line)=>{
+    const cols=line.replace(/\r/g,'').split(',');
+    rows.push({date:(cols[di]||'').trim(),phone:(cols[pi]||'').trim(),name:(cols[ni]||'').trim(),activity:(cols[ai]||'').trim()});
   });
+  scheduleData=rows;
+  renderPreview(rows,filename);
+  updateStats();
+  document.getElementById('btnUpload').disabled=false;
+}
 
-  let scheduleData = [];
+function isValid(r){return r.date&&r.phone&&r.name&&r.activity&&/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&/^\d{10,15}$/.test(r.phone);}
+function getError(r){if(!r.date||!/^\d{4}-\d{2}-\d{2}$/.test(r.date))return'Bad date';if(!r.phone||!/^\d{10,15}$/.test(r.phone))return'Bad phone';if(!r.name)return'No name';if(!r.activity)return'No activity';return'Invalid';}
 
-  function showTab(name) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => {
-      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(name)) n.classList.add('active');
-    });
-  }
+function activityBadge(a){
+  const key=(a||'').toLowerCase();
+  const label=a?a.charAt(0).toUpperCase()+a.slice(1):'Unknown';
+  const cls=['dance','meditation','exercise','sketching','yoga','zumba','quiz'].includes(key)?key:'other';
+  return `<span class="badge ${cls}">${label}</span>`;
+}
 
-  // Drag and drop
-  const dz = document.getElementById('dropzone');
-  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragging'); });
-  dz.addEventListener('dragleave', () => dz.classList.remove('dragging'));
-  dz.addEventListener('drop', e => {
-    e.preventDefault(); dz.classList.remove('dragging');
-    const f = e.dataTransfer.files[0];
-    if (f) handleFile(f);
-  });
+function renderPreview(rows,filename){
+  const wrap=document.getElementById('previewWrap');
+  const body=document.getElementById('previewBody');
+  const validRows=rows.filter(isValid);
+  const errRows=rows.filter(r=>!isValid(r));
+  document.getElementById('previewTitle').textContent=`Preview (${Math.min(rows.length,10)} of ${rows.length} rows)`;
+  document.getElementById('validCount').textContent=`${validRows.length} valid`;
+  const ec=document.getElementById('errCount');
+  ec.textContent=errRows.length?` / ${errRows.length} errors`:'';
+  ec.style.color=errRows.length?'var(--danger)':'';
+  addLog('info',`Parsed "${filename}" — ${rows.length} rows, ${validRows.length} valid`);
+  body.innerHTML=rows.slice(0,10).map(r=>{
+    const valid=isValid(r);const isToday=r.date===TODAY;
+    return `<tr><td>${r.date}${isToday?'<span class="today-tag">today</span>':''}</td><td>${r.phone}</td><td>${r.name}</td><td>${activityBadge(r.activity)}</td><td class="${valid?'status-valid':'status-error'}">${valid?'✓ valid':'✗ '+getError(r)}</td></tr>`;
+  }).join('');
+  wrap.classList.add('show');
+}
 
-  function handleFile(file) {
-    if (!file || !file.name.endsWith('.csv')) {
-      showUploadMsg('error', 'Please upload a valid .csv file.');
-      return;
+function updateStats(){
+  const unique=[...new Set(scheduleData.filter(isValid).map(r=>r.phone))].length;
+  const todayRows=scheduleData.filter(r=>isValid(r)&&r.date===TODAY);
+  const futureDates=[...new Set(scheduleData.filter(r=>isValid(r)&&r.date>=TODAY).map(r=>r.date))];
+  document.getElementById('statTotal').textContent=unique;
+  document.getElementById('statToday').textContent=todayRows.length;
+  document.getElementById('statDays').textContent=futureDates.length;
+}
+
+function renderSchedule(){
+  const el=document.getElementById('scheduleContent');
+  if(!scheduleData.length)return;
+  const byDate={};
+  scheduleData.filter(r=>isValid(r)&&r.date>=TODAY).forEach(r=>{if(!byDate[r.date])byDate[r.date]=[];byDate[r.date].push(r);});
+  const dates=Object.keys(byDate).sort();
+  if(!dates.length){el.innerHTML='<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><h3>No upcoming activities</h3></div>';return;}
+  el.innerHTML=dates.map(date=>{
+    const rows=byDate[date];const isToday=date===TODAY;
+    const formatted=new Date(date+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+    return `<div class="schedule-day"><div class="schedule-day-header"><span class="date">${formatted}${isToday?'<span class="today-tag">today</span>':''}</span><span class="count">${rows.length} employee${rows.length>1?'s':''}</span></div><div class="employee-chips">${rows.map(r=>`<div class="chip"><div class="avatar">${r.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div><span>${r.name}</span>${activityBadge(r.activity)}</div>`).join('')}</div></div>`;
+  }).join('');
+}
+
+// MANAGE TAB
+async function loadManage(){
+  const body=document.getElementById('manageBody');
+  const countEl=document.getElementById('manageCount');
+  body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">Loading...</td></tr>';
+  try{
+    const res=await fetch('/api/schedule');
+    const data=await res.json();
+    if(data.schedule&&data.schedule.length){
+      scheduleData=data.schedule;
+      updateStats();renderSchedule();
+      countEl.textContent=`${data.schedule.length} total entries`;
+      body.innerHTML=data.schedule.map((r,i)=>{
+        const isToday=r.date===TODAY;
+        return `<tr>
+          <td style="color:var(--muted);font-size:12px">${i+1}</td>
+          <td>${r.date}${isToday?'<span class="today-tag">today</span>':''}</td>
+          <td style="font-size:12px;color:var(--text2)">${r.phone}</td>
+          <td><strong>${r.name}</strong></td>
+          <td>${activityBadge(r.activity)}</td>
+          <td>
+            <div style="display:flex;gap:6px">
+              <button class="action-btn edit" onclick="openEdit(${i})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </button>
+              <button class="action-btn del" onclick="confirmDeleteRow(${i},'${r.name}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    } else {
+      countEl.textContent='No entries found';
+      body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No schedule uploaded yet</td></tr>';
     }
-    const reader = new FileReader();
-    reader.onload = e => parseCSV(e.target.result, file.name);
-    reader.readAsText(file);
+  }catch(e){
+    body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--danger)">Error loading schedule</td></tr>';
   }
+}
 
-  function parseCSV(text, filename) {
-    const lines = text.trim().split('\n').filter(l => l.trim());
-    if (lines.length < 2) { showUploadMsg('error', 'CSV appears empty.'); return; }
-    const headers = lines[0].toLowerCase().replace(/\r/g,'').split(',').map(h => h.trim());
-    const di = headers.indexOf('date'), pi = headers.indexOf('phone');
-    const ni = headers.indexOf('name'), ai = headers.indexOf('activity');
-    if ([di,pi,ni,ai].includes(-1)) { showUploadMsg('error', 'Missing columns. Need: date, phone, name, activity'); return; }
-    const rows = [];
-    lines.slice(1).forEach((line, idx) => {
-      const cols = line.replace(/\r/g,'').split(',');
-      rows.push({
-        date: (cols[di]||'').trim(), phone: (cols[pi]||'').trim(),
-        name: (cols[ni]||'').trim(), activity: (cols[ai]||'').trim(),
-        _line: idx + 2
-      });
-    });
-    scheduleData = rows;
-    renderPreview(rows, filename);
-    updateStats();
-    document.getElementById('btnUpload').disabled = false;
-  }
+// EDIT
+function openEdit(index){
+  const r=scheduleData[index];
+  document.getElementById('editIndex').value=index;
+  document.getElementById('editDate').value=r.date;
+  document.getElementById('editPhone').value=r.phone;
+  document.getElementById('editName').value=r.name;
+  document.getElementById('editActivity').value=(r.activity||'').toLowerCase();
+  document.getElementById('editModal').classList.add('show');
+}
 
-  function renderPreview(rows, filename) {
-    const wrap = document.getElementById('previewWrap');
-    const body = document.getElementById('previewBody');
-    const validRows = rows.filter(r => isValid(r));
-    const errRows = rows.filter(r => !isValid(r));
-    document.getElementById('previewTitle').textContent = `Preview (${Math.min(rows.length,10)} of ${rows.length} rows)`;
-    document.getElementById('validCount').textContent = `${validRows.length} valid`;
-    const ec = document.getElementById('errCount');
-    ec.textContent = errRows.length ? ` / ${errRows.length} errors` : '';
-    ec.style.color = errRows.length ? 'var(--danger)' : '';
-    addLog('info', `Parsed "${filename}" — ${rows.length} rows, ${validRows.length} valid`);
-    body.innerHTML = rows.slice(0,10).map(r => {
-      const valid = isValid(r);
-      const isToday = r.date === TODAY;
-      return `<tr>
-        <td>${r.date}${isToday ? '<span class="today-tag">today</span>' : ''}</td>
-        <td>${r.phone}</td>
-        <td>${r.name}</td>
-        <td>${activityBadge(r.activity)}</td>
-        <td class="${valid ? 'status-valid' : 'status-error'}">${valid ? '✓ valid' : '✗ ' + getError(r)}</td>
-      </tr>`;
-    }).join('');
-    wrap.classList.add('show');
-  }
+function closeModal(){document.getElementById('editModal').classList.remove('show');}
 
-  function isValid(r) {
-    return r.date && r.phone && r.name && r.activity &&
-      /^\d{4}-\d{2}-\d{2}$/.test(r.date) && /^\d{10,15}$/.test(r.phone);
-  }
-
-  function getError(r) {
-    if (!r.date || !/^\d{4}-\d{2}-\d{2}$/.test(r.date)) return 'Bad date';
-    if (!r.phone || !/^\d{10,15}$/.test(r.phone)) return 'Bad phone';
-    if (!r.name) return 'No name';
-    if (!r.activity) return 'No activity';
-    return 'Invalid';
-  }
-
-  function activityBadge(a) {
-    const key = (a||'').toLowerCase();
-    const label = a ? a.charAt(0).toUpperCase() + a.slice(1) : 'Unknown';
-    const cls = ['dance','meditation','exercise','sketching','yoga','zumba','quiz'].includes(key) ? key : 'other';
-    return `<span class="badge ${cls}">${label}</span>`;
-  }
-
-  function updateStats() {
-    const unique = [...new Set(scheduleData.filter(isValid).map(r => r.phone))].length;
-    const todayRows = scheduleData.filter(r => isValid(r) && r.date === TODAY);
-    const futureDates = [...new Set(scheduleData.filter(r => isValid(r) && r.date >= TODAY).map(r => r.date))];
-    document.getElementById('statTotal').textContent = unique;
-    document.getElementById('statToday').textContent = todayRows.length;
-    document.getElementById('statDays').textContent = futureDates.length;
-  }
-
-  function renderSchedule() {
-    const el = document.getElementById('scheduleContent');
-    if (!scheduleData.length) return;
-    const byDate = {};
-    scheduleData.filter(r => isValid(r) && r.date >= TODAY).forEach(r => {
-      if (!byDate[r.date]) byDate[r.date] = [];
-      byDate[r.date].push(r);
-    });
-    const dates = Object.keys(byDate).sort();
-    if (!dates.length) { el.innerHTML = '<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><h3>No upcoming activities</h3><p>All activities in the schedule are in the past.</p></div>'; return; }
-    el.innerHTML = dates.map(date => {
-      const rows = byDate[date];
-      const isToday = date === TODAY;
-      const formatted = new Date(date + 'T12:00:00').toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'long', year:'numeric' });
-      return `<div class="schedule-day">
-        <div class="schedule-day-header">
-          <span class="date">${formatted}${isToday ? '<span class="today-tag">today</span>' : ''}</span>
-          <span class="count">${rows.length} employee${rows.length>1?'s':''}</span>
-        </div>
-        <div class="employee-chips">
-          ${rows.map(r => `<div class="chip">
-            <div class="avatar">${r.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
-            <span>${r.name}</span>
-            ${activityBadge(r.activity)}
-          </div>`).join('')}
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  async function uploadCSV() {
-    const valid = scheduleData.filter(isValid);
-    if (!valid.length) { showUploadMsg('error', 'No valid rows to upload.'); return; }
-    const btn = document.getElementById('btnUpload');
-    btn.disabled = true;
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0"/></svg> Uploading…`;
-    document.getElementById('progressBar').style.display = 'block';
-    const fill = document.getElementById('progressFill');
-    let p = 0;
-    const iv = setInterval(() => { p = Math.min(p + 8, 85); fill.style.width = p + '%'; }, 120);
-    try {
-      const res = await fetch('/api/upload', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ schedule: valid }) });
-      const data = await res.json();
-      clearInterval(iv); fill.style.width = '100%';
-      if (res.ok) {
-        showUploadMsg('success', `✓ Schedule uploaded! ${data.count} entries saved. Messages will trigger at 8:00 AM IST daily.`);
-        addLog('ok', `Schedule saved — ${data.count} rows active`);
-        renderSchedule();
-      } else {
-        showUploadMsg('error', data.error || 'Upload failed.');
-        addLog('err', 'Upload failed: ' + (data.error || 'server error'));
-      }
-    } catch(e) {
-      clearInterval(iv);
-      showUploadMsg('error', 'Network error. Check your connection.');
-      addLog('err', 'Network error: ' + e.message);
+async function saveEdit(){
+  const index=parseInt(document.getElementById('editIndex').value);
+  const row={
+    date:document.getElementById('editDate').value.trim(),
+    phone:document.getElementById('editPhone').value.trim(),
+    name:document.getElementById('editName').value.trim(),
+    activity:document.getElementById('editActivity').value
+  };
+  if(!isValid(row)){alert('Please check the date format (YYYY-MM-DD) and phone number.');return;}
+  try{
+    const res=await fetch('/api/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'update',index,row})});
+    const data=await res.json();
+    if(res.ok){
+      closeModal();
+      addLog('ok',`Updated entry for ${row.name}`);
+      loadManage();
+    } else {
+      alert('Error: '+data.error);
     }
-    btn.disabled = false;
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Upload & Activate Schedule`;
+  }catch(e){alert('Network error: '+e.message);}
+}
+
+// DELETE ROW
+let pendingAction=null;
+function confirmDeleteRow(index,name){
+  document.getElementById('confirmText').textContent=`Delete ${name}'s activity? This cannot be undone.`;
+  document.getElementById('confirmBtn').onclick=()=>deleteRow(index,name);
+  document.getElementById('confirmModal').classList.add('show');
+}
+
+async function deleteRow(index,name){
+  closeConfirm();
+  try{
+    const res=await fetch('/api/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',index})});
+    const data=await res.json();
+    if(res.ok){
+      addLog('ok',`Deleted entry for ${name}. ${data.count} entries remaining.`);
+      loadManage();
+    } else {alert('Error: '+data.error);}
+  }catch(e){alert('Network error: '+e.message);}
+}
+
+// CLEAR ALL
+function confirmClearAll(){
+  document.getElementById('confirmText').textContent='This will delete ALL scheduled activities permanently. Are you absolutely sure?';
+  document.getElementById('confirmBtn').onclick=clearAll;
+  document.getElementById('confirmModal').classList.add('show');
+}
+
+async function clearAll(){
+  closeConfirm();
+  try{
+    const res=await fetch('/api/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'clear'})});
+    const data=await res.json();
+    if(res.ok){
+      scheduleData=[];
+      updateStats();
+      addLog('ok','Entire schedule cleared.');
+      loadManage();
+    } else {alert('Error: '+data.error);}
+  }catch(e){alert('Network error: '+e.message);}
+}
+
+function closeConfirm(){document.getElementById('confirmModal').classList.remove('show');}
+
+// Close modals on overlay click
+document.getElementById('editModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('confirmModal').addEventListener('click',function(e){if(e.target===this)closeConfirm();});
+
+async function uploadCSV(){
+  const valid=scheduleData.filter(isValid);
+  if(!valid.length){showUploadMsg('error','No valid rows to upload.');return;}
+  const btn=document.getElementById('btnUpload');
+  btn.disabled=true;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0"/></svg> Uploading…';
+  document.getElementById('progressBar').style.display='block';
+  const fill=document.getElementById('progressFill');
+  let p=0;const iv=setInterval(()=>{p=Math.min(p+8,85);fill.style.width=p+'%';},120);
+  try{
+    const res=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({schedule:valid})});
+    const data=await res.json();
+    clearInterval(iv);fill.style.width='100%';
+    if(res.ok){showUploadMsg('success',`✓ Schedule uploaded! ${data.count} entries saved. Messages will trigger at 8:00 AM IST daily.`);addLog('ok',`Schedule saved — ${data.count} rows active`);renderSchedule();}
+    else{showUploadMsg('error',data.error||'Upload failed.');addLog('err','Upload failed: '+(data.error||'server error'));}
+  }catch(e){clearInterval(iv);showUploadMsg('error','Network error.');addLog('err','Network error: '+e.message);}
+  btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Upload & Activate Schedule';
+}
+
+async function testTodayTrigger(){
+  addLog('info',"Manually triggering today's messages…");
+  try{
+    const res=await fetch('/api/trigger',{method:'POST'});
+    const data=await res.json();
+    if(res.ok){addLog('ok',`Done — ${data.sent} sent, ${data.failed||0} failed for ${data.date}`);document.getElementById('statSent').textContent=parseInt(document.getElementById('statSent').textContent||'0')+(data.sent||0);}
+    else{addLog('err','Trigger failed: '+(data.error||'unknown'));}
+  }catch(e){addLog('err','Network error: '+e.message);}
+}
+
+function downloadSample(){
+  const csv=`date,phone,name,activity\n2026-06-02,919876543210,Riya Sharma,dance\n2026-06-03,919123456780,Arjun Mehta,meditation\n2026-06-04,919876543210,Riya Sharma,exercise`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='sample_schedule.csv';a.click();
+}
+
+function addLog(type,msg){
+  const ts=new Date().toLocaleTimeString();
+  const line=`<div class="log-line ${type}"><span class="ts">${ts}</span><span class="msg">${msg}</span></div>`;
+  ['logBox','logBox2'].forEach(id=>{const b=document.getElementById(id);if(b){b.innerHTML+=line;b.scrollTop=b.scrollHeight;}});
+}
+
+function clearLogs(){['logBox','logBox2'].forEach(id=>{const b=document.getElementById(id);if(b)b.innerHTML='';});}
+function showUploadMsg(type,msg){const el=document.getElementById('uploadMsg');el.className='msg-box show '+type;el.textContent=msg;}
+
+// Init
+addLog('info','System ready. Waiting for schedule upload.');
+fetch('/api/schedule').then(r=>r.json()).then(data=>{
+  if(data.schedule&&data.schedule.length){
+    scheduleData=data.schedule;updateStats();renderSchedule();
+    addLog('ok',`Loaded existing schedule — ${data.schedule.length} entries`);
+    document.getElementById('btnUpload').disabled=false;
   }
-
-  async function testTodayTrigger() {
-    addLog('info', 'Manually triggering today\'s messages…');
-    try {
-      const res = await fetch('/api/trigger', { method:'POST' });
-      const data = await res.json();
-      if (res.ok) {
-        addLog('ok', `Done — ${data.sent} sent, ${data.failed||0} failed for ${data.date}`);
-        document.getElementById('statSent').textContent = parseInt(document.getElementById('statSent').textContent||'0') + (data.sent||0);
-      } else {
-        addLog('err', 'Trigger failed: ' + (data.error||'unknown'));
-      }
-    } catch(e) {
-      addLog('err', 'Network error: ' + e.message);
-    }
-  }
-
-  function downloadSample() {
-    const csv = `date,phone,name,activity\n2026-06-02,919876543210,Riya Sharma,dance\n2026-06-02,919123456780,Arjun Mehta,meditation\n2026-06-03,919876543210,Riya Sharma,exercise\n2026-06-04,919123456780,Arjun Mehta,yoga`;
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
-    a.download = 'sample_schedule.csv';
-    a.click();
-  }
-
-  function addLog(type, msg) {
-    const ts = new Date().toLocaleTimeString();
-    const line = `<div class="log-line ${type}"><span class="ts">${ts}</span><span class="msg">${msg}</span></div>`;
-    ['logBox','logBox2'].forEach(id => {
-      const box = document.getElementById(id);
-      if (box) { box.innerHTML += line; box.scrollTop = box.scrollHeight; }
-    });
-  }
-
-  function clearLogs() {
-    ['logBox','logBox2'].forEach(id => { const b = document.getElementById(id); if(b) b.innerHTML = ''; });
-  }
-
-  function showUploadMsg(type, msg) {
-    const el = document.getElementById('uploadMsg');
-    el.className = 'msg-box show ' + type;
-    el.textContent = msg;
-  }
-
-  // Spin animation for loader
-  const style = document.createElement('style');
-  style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
-  document.head.appendChild(style);
-
-  // Init
-  addLog('info', 'System ready. Waiting for schedule upload.');
-  fetch('/api/schedule').then(r => r.json()).then(data => {
-    if (data.schedule && data.schedule.length) {
-      scheduleData = data.schedule;
-      updateStats(); renderSchedule();
-      addLog('ok', `Loaded existing schedule — ${data.schedule.length} entries`);
-      document.getElementById('btnUpload').disabled = false;
-    }
-  }).catch(() => {});
+}).catch(()=>{});
 </script>
 </body>
 </html>
