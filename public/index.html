@@ -205,11 +205,77 @@
     .danger-zone-text p { font-size:13px; color:var(--text2); }
 
     ::-webkit-scrollbar{width:6px;height:6px} ::-webkit-scrollbar-track{background:var(--surface2)} ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px}
+
+    /* HAMBURGER */
+    .hamburger{display:none;position:fixed;top:14px;left:14px;z-index:200;width:40px;height:40px;background:var(--white);border:1px solid var(--border);border-radius:10px;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);}
+    .hamburger svg{width:20px;height:20px;color:var(--brand);}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(15,21,53,.4);z-index:99;backdrop-filter:blur(2px);}
+    .sidebar-overlay.show{display:block;}
+
+    /* TABLET */
+    @media(max-width:1024px){
+      .stats-grid{grid-template-columns:repeat(2,1fr);}
+      .main{padding:28px 24px;}
+      .topbar{flex-direction:column;align-items:flex-start;gap:12px;}
+      .topbar-right{width:100%;}
+    }
+
+    /* MOBILE */
+    @media(max-width:768px){
+      .hamburger{display:flex;}
+      .sidebar{transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);}
+      .sidebar.open{transform:translateX(0);}
+      .main{margin-left:0;padding:72px 16px 24px;}
+      .stats-grid{grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
+      .stat-card{padding:16px;border-radius:14px;}
+      .stat-value{font-size:24px;}
+      .stat-icon{width:32px;height:32px;margin-bottom:10px;}
+      .stat-icon svg{width:15px;height:15px;}
+      .card{padding:18px;border-radius:14px;margin-bottom:14px;}
+      .card-header{flex-direction:column;gap:10px;align-items:flex-start;}
+      .topbar{margin-bottom:20px;}
+      .topbar-left h2{font-size:20px;}
+      .topbar-right{width:100%;}
+      .date-chip{font-size:12px;padding:7px 12px;}
+      .dropzone{padding:32px 16px;}
+      .drop-icon{width:44px;height:44px;}
+      .drop-icon svg{width:20px;height:20px;}
+      .dropzone h3{font-size:14px;}
+      .format-hint{flex-direction:column;align-items:flex-start;gap:8px;}
+      .btn-row{flex-direction:column;}
+      .btn-row .btn{width:100%;justify-content:center;}
+      .btn{padding:12px 18px;}
+      table{min-width:520px;}
+      .log-box{font-size:11.5px;}
+      .danger-zone{flex-direction:column;align-items:flex-start;gap:14px;}
+      .danger-zone .btn{width:100%;justify-content:center;}
+      .modal{margin:16px;padding:22px;border-radius:16px;max-width:calc(100vw - 32px);}
+      .modal-actions{flex-direction:column-reverse;}
+      .modal-actions .btn{width:100%;justify-content:center;}
+    }
+
+    /* SMALL MOBILE */
+    @media(max-width:480px){
+      .stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
+      .stat-card{padding:14px;}
+      .stat-value{font-size:22px;}
+      .main{padding:64px 12px 20px;}
+      .card{padding:14px;}
+      .topbar-left h2{font-size:18px;}
+      .employee-chips{padding:10px 12px;gap:8px;}
+      .chip{padding:6px 10px;font-size:12px;}
+    }
   </style>
 </head>
 <body>
+<!-- Hamburger -->
+<button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
 <div class="shell">
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -731,6 +797,20 @@ function addLog(type,msg){
 
 function clearLogs(){['logBox','logBox2'].forEach(id=>{const b=document.getElementById(id);if(b)b.innerHTML='';});}
 function showUploadMsg(type,msg){const el=document.getElementById('uploadMsg');el.className='msg-box show '+type;el.textContent=msg;}
+
+// Hamburger menu
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+// Close sidebar when nav item clicked on mobile
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{ if(window.innerWidth<=768) closeSidebar(); });
+});
 
 // Init
 addLog('info','System ready. Waiting for schedule upload.');
