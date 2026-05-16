@@ -548,6 +548,7 @@ function showTab(name) {
   document.getElementById('tab-'+name).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes(name))n.classList.add('active');});
   if(name==='manage') loadManage();
+  if(window.innerWidth<=768) closeSidebar();
 }
 
 // Drag drop
@@ -807,10 +808,7 @@ function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('show');
 }
-// Close sidebar when nav item clicked on mobile
-document.querySelectorAll('.nav-item').forEach(item=>{
-  item.addEventListener('click',()=>{ if(window.innerWidth<=768) closeSidebar(); });
-});
+// Close sidebar handled inside showTab
 
 // Init
 addLog('info','System ready. Waiting for schedule upload.');
